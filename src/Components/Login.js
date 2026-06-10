@@ -23,14 +23,18 @@ function Login() {
         }
       );
 
-      // const data = await response.json();
+    if (response.success) {
+  alert("התחברת בהצלחה!");
 
-      if (response.success) {
-        alert("התחברת בהצלחה!");
+  localStorage.setItem("user", JSON.stringify(response.user));
 
-        localStorage.setItem("user", JSON.stringify(response.user));
-        navigate("/");
-      } else {
+  if (response.user.isAdmin) {
+    navigate("/admin-dashboard");
+  } else {
+    navigate("/dashboard");
+  }
+}
+       else {
         alert(response.message);
       }
 
@@ -48,13 +52,7 @@ function Login() {
           <ButtonComponent
             text="← חזור לדף הבית"
             onClick={() => window.location.href = "#home"}
-            style={{
-              backgroundColor: "#e74c3c",
-              color: "white",
-              border: "none",
-              padding: "10px 15px",
-              borderRadius: "8px"
-            }}
+            
           />
         </div>
 

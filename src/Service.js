@@ -1,9 +1,7 @@
 // require("dotenv").config();
  async function GetItems(url) {
     const res = await fetch(`http://localhost:3001/${url}`);
-    // בדיקה אם התגובה תקינה לפני ניסיון ההמרה ל-JSON
     if (!res.ok) {
-        // אם השרת מחזיר שגיאה, ננסה להוציא את הודעת השגיאה או להחזיר שגיאה כללית
         let errorData;
         try {
             errorData = await res.json();

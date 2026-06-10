@@ -2,13 +2,11 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 import ButtonComponent from "./ButtonComponent";
 
-function UserDashboard() {
-
+function AdminDashboard() {
   const navigate = useNavigate();
 
-  // בעתיד אפשר להביא את השם מה-DB או מההתחברות
   const user = JSON.parse(localStorage.getItem("user"));
-const userName = user?.userName || "משתמש";
+  const userName = user?.userName || "מנהל";
 
   return (
     <div
@@ -33,22 +31,19 @@ const userName = user?.userName || "משתמש";
           display: "flex",
           justifyContent: "space-between",
           alignItems: "center",
-          boxShadow: "0 4px 6px rgba(0,0,0,0.1)",
           boxSizing: "border-box",
         }}
       >
-        {/* שלום לקוח */}
         <h2 style={{ margin: 0 }}>
           שלום {userName}
         </h2>
 
-        {/* כפתור התנתקות */}
         <ButtonComponent
           text="התנתק"
-         onClick={() => {
-    localStorage.removeItem("user");
-    navigate("/");
-  }}
+          onClick={() => {
+            localStorage.removeItem("user");
+            navigate("/");
+          }}
           style={{
             backgroundColor: "white",
             color: "#e74c3c",
@@ -65,13 +60,8 @@ const userName = user?.userName || "משתמש";
           textAlign: "center",
         }}
       >
-        <h1 style={{ fontSize: "42px", marginBottom: "10px" }}>
-          מערכת ניהול מיגוניות
-        </h1>
-
-        <p style={{ fontSize: "20px" }}>
-          ברוך הבא לאזור האישי שלך
-        </p>
+        <h1>אזור מנהל</h1>
+        <p>ניהול מערכת המיגוניות</p>
       </div>
 
       {/* כפתורים */}
@@ -85,57 +75,35 @@ const userName = user?.userName || "משתמש";
           maxWidth: "1000px",
         }}
       >
-
         <ButtonComponent
-          text="רשימת מיגוניות"
-          onClick={() => navigate("/all-shelters")}
-          style={{
-            width: "220px",
-            height: "90px",
-            fontSize: "18px",
-          }}
+          text="ניהול מיגוניות"
+          onClick={() => navigate("/admin/shelters")}
+          style={{ width: "220px", height: "90px" }}
         />
 
         <ButtonComponent
           text="הוספת מיגונית"
           onClick={() => navigate("/add-shelter")}
-          style={{
-            width: "220px",
-            height: "90px",
-            fontSize: "18px",
-          }}
+          style={{ width: "220px", height: "90px" }}
         />
 
         <ButtonComponent
-          text="רשימת מקומות בטוחים"
-          onClick={() => navigate("/safe-places")}
-          style={{
-            width: "220px",
-            height: "90px",
-            fontSize: "18px",
-          }}
+          text="כל הבקשות"
+          onClick={() => navigate("/admin/requests")}
+          style={{ width: "220px", height: "90px" }}
+        />
+
+        <ButtonComponent
+          text="ניהול משתמשים"
+          onClick={() => navigate("/admin/users")}
+          style={{ width: "220px", height: "90px" }}
         />
 
         <ButtonComponent
           text="פרופיל"
           onClick={() => navigate("/profile")}
-          style={{
-            width: "220px",
-            height: "90px",
-            fontSize: "18px",
-          }}
+          style={{ width: "220px", height: "90px" }}
         />
-
-        <ButtonComponent
-          text="הבקשות שלי"
-          onClick={() => navigate("/my-requests")}
-          style={{
-            width: "220px",
-            height: "90px",
-            fontSize: "18px",
-          }}
-        />
-
       </div>
 
       {/* Footer */}
@@ -155,4 +123,4 @@ const userName = user?.userName || "משתמש";
   );
 }
 
-export default UserDashboard;
+export default AdminDashboard;
