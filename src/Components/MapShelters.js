@@ -21,14 +21,12 @@ function MapShelters() {
   const [directionsResponse, setDirectionsResponse] = useState(null);
   const [selectedShelter, setSelectedShelter] = useState(null);
 
-  const [shelters, setShelters] = useState([
-    { id: 1, name: "מיגונית הרצל", address: "הרצל 12", lat: 31.3145, lng: 34.6200, distance: "300m" },
-    { id: 2, name: "מיגונית ביאליק", address: "ביאליק 5", lat: 31.3155, lng: 34.6215, distance: "450m" },
-    { id: 3, name: "מיגונית בן גוריון", address: "בן גוריון 40", lat: 31.3160, lng: 34.6190, distance: "600m" }
-  ]);
+  const [shelters, setShelters] = useState([]);
   async function loadShelters() {
     try {
       const data = await GetItems("shelters");
+              console.log(data);
+
       setShelters(data);
     } catch (err) {
       console.log(err);
@@ -41,12 +39,20 @@ function MapShelters() {
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
         (position) => {
+           console.log(position.coords.latitude);
+    console.log(position.coords.longitude);
+
           setUserLocation({
             lat: position.coords.latitude,
             lng: position.coords.longitude
           });
         },
-        () => console.error("לא ניתן לקבל מיקום.")
+        () => console.error("לא ניתן לקבל מיקום."),
+  {
+    enableHighAccuracy: true,
+    timeout: 10000,
+    maximumAge: 0
+  }
       );
     }
   }, []);
@@ -85,10 +91,10 @@ function MapShelters() {
         
         {shelters.map((shelter) => (
           <div 
-            key={shelter.id} 
+           key={shelter.shelterId}
             onClick={() => calculateRoute(shelter)}
             // הוספת מחלקה selected אם המיגונית נבחרה
-            className={`shelter-card ${selectedShelter?.id === shelter.id ? 'selected' : ''}`}
+            className={`shelter-card ${selectedShelter?.shelterId === shelter.shelterId ? 'selected' : ''}`}
           >
             <h3 className="shelter-name">{shelter.shelterName}</h3>
             <p className="shelter-address">כתובת: {shelter.address}</p>
@@ -110,7 +116,7 @@ function MapShelters() {
 
           {shelters.map(shelter => (
             <MarkerF
-              key={shelter.id}
+           key={shelter.shelterId}
               position={{ lat: shelter.latitude, lng: shelter.longitude }}
               onClick={() => calculateRoute(shelter)}
             />

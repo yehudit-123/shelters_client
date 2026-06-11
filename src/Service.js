@@ -13,23 +13,42 @@
 
     return await res.json();
 }
-async function PutItems(url, body, func) {
+
+async function PutItems(url, body) {
+
     const res = await fetch(`http://localhost:3001/${url}`, {
         method: "PUT",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+            "Content-Type": "application/json"
+        },
         body: JSON.stringify(body)
-    })
+    });
 
-    console.log(res);
-    if (!res.ok) {
-        throw new Error('something went wrong, please try again');
-    }
     const data = await res.json();
 
-    if (func) {
-        func(data);
+    if (!res.ok) {
+        throw new Error(data.message || "Request failed");
     }
+
+    return data;
 }
+// async function PutItems(url, body, func) {
+//     const res = await fetch(`http://localhost:3001/${url}`, {
+//         method: "PUT",
+//         headers: { "Content-Type": "application/json" },
+//         body: JSON.stringify(body)
+//     })
+
+//     console.log(res);
+//     if (!res.ok) {
+//         throw new Error('something went wrong, please try again');
+//     }
+//     const data = await res.json();
+
+//     if (func) {
+//         func(data);
+//     }
+// }
 async function PostItems(url, body) {
     const res = await fetch(`http://localhost:3001/${url}`, {
         method: "POST",
@@ -69,3 +88,34 @@ async function DeleteItems(url) {
 }
 
 export { DeleteItems, PutItems, PostItems ,GetItems}
+
+// | פעולה               | Method | Route        |
+// | ------------------- | ------ | ------------ |
+// | התחברות             | POST   | /users/login |
+// | קבלת כל המשתמשים    | GET    | /users       |
+// | קבלת משתמש לפי מזהה | GET    | /users/:id   |
+// | הוספת משתמש         | POST   | /users       |
+// | מחיקת משתמש         | DELETE | /users/:id   |
+// | עדכון משתמש         | PUT    | /users/:id   |
+
+//התחברות
+// const result = await PostItems(
+//     "users/login",
+//     {
+//         userName: username,
+//         passwordHash: password
+//     }
+// );
+
+//הוספת משתמש
+// await PostItems(
+//     "users",
+//     {
+//         userName: "David",
+//         email: "david@gmail.com",
+//         phone: "0501234567"
+//     }
+// );
+
+//מחיקת משתמש
+// await DeleteItems("users/5");

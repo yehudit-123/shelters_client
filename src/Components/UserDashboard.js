@@ -86,7 +86,11 @@ const userName = user?.userName || "משתמש";
         }}
       >
 
-        <ButtonComponent
+<ButtonComponent
+          text="חיפוש מיגנות קרובה"
+          onClick={() => navigate("/map")}
+        />
+        {/* <ButtonComponent
           text="רשימת מיגוניות"
           onClick={() => navigate("/all-shelters")}
           style={{
@@ -94,7 +98,7 @@ const userName = user?.userName || "משתמש";
             height: "90px",
             fontSize: "18px",
           }}
-        />
+        /> */}
 
         <ButtonComponent
           text="הוספת מיגונית"

@@ -13,7 +13,9 @@ import AllShelters from "./Components/AllShelters";
 import AddShelter from "./Components/AddShelter";
  import AdminDashboard from "./Components/AdminDashboard";
 import Profile from "./Components/Profile";
-
+import ShowUser from "./Components/ShowUser";
+import AdminShelters from "./Components/AdminShelters";
+import MyShelterRequests from "./Components/MyShelterRequests";
 
 function App() {
   return (
@@ -39,7 +41,9 @@ function App() {
     {/* <Route path="/safe-places" element={<SafePlaces />} /> */}
     <Route path="/profile" element={<Profile />} />
   <Route path="/admin-dashboard" element={<AdminDashboard />} />
-
+  <Route path="/show-user" element={<ShowUser />} />
+  <Route path="/admin-shelters" element={<AdminShelters />} />
+  <Route path="/my-requests" element={<MyShelterRequests />} />
 
     </Routes>
   );

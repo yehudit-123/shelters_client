@@ -13,28 +13,24 @@ function Login() {
 
   const handleLogin = async (e) => {
     e.preventDefault();
-
     try {
-      const response = await PostItems(
-        "users/login",
+      const response = await PostItems("users/login",
         {
           userName: username,
           passwordHash: password
         }
       );
 
-    if (response.success) {
-  alert("התחברת בהצלחה!");
-
-  localStorage.setItem("user", JSON.stringify(response.user));
-
-  if (response.user.isAdmin) {
-    navigate("/admin-dashboard");
-  } else {
-    navigate("/dashboard");
-  }
-}
-       else {
+      if (response.success) {
+        alert("התחברת בהצלחה!");
+        localStorage.setItem("user", JSON.stringify(response.user));
+        if (response.user.userRole === "admin") {
+          navigate("/admin-dashboard");
+        } else {
+          navigate("/dashboard");
+        }
+      }
+      else {
         alert(response.message);
       }
 
@@ -52,7 +48,7 @@ function Login() {
           <ButtonComponent
             text="← חזור לדף הבית"
             onClick={() => window.location.href = "#home"}
-            
+
           />
         </div>
 

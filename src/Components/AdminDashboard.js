@@ -99,6 +99,12 @@ function AdminDashboard() {
           style={{ width: "220px", height: "90px" }}
         />
 
+<ButtonComponent
+  text="הצגת משתמש"
+  onClick={() => navigate("/show-user")}
+  style={{ width: "220px", height: "90px" }}
+/>
+
         <ButtonComponent
           text="פרופיל"
           onClick={() => navigate("/profile")}
