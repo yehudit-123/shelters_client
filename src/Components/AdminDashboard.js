@@ -1,128 +1,74 @@
 import React from "react";
-import { useNavigate } from "react-router-dom";
+import { useParams, useNavigate, Outlet, useLocation } from "react-router-dom";
+import { useEffect } from "react";
+import { toast } from "react-toastify";
 import ButtonComponent from "./ButtonComponent";
+import "../Style/CssPages/AdminDashboard.css";
 
 function AdminDashboard() {
+  const { id } = useParams();
   const navigate = useNavigate();
-
+  const location = useLocation();
+  const isHome = location.pathname === `/admin-dashboard/${id}`;
   const user = JSON.parse(localStorage.getItem("user"));
   const userName = user?.userName || "מנהל";
 
+  const logout = () => {
+    localStorage.removeItem("user");
+    toast.success("יצאת בבטחה מחשבונך");
+    navigate("/");
+  };
+  useEffect(() => {
+    if (!user) {
+      navigate("/");
+      return;
+    }
+    if (user.userId.toString() !== id) {
+      toast.warning("אין הרשאת גישה!!!");
+      navigate(`/admin-dashboard/${user.userId}`);
+    }
+  }, [id, user, navigate]);
+
   return (
-    <div
-      style={{
-        fontFamily: "Arial, sans-serif",
-        minHeight: "100vh",
-        backgroundColor: "#ffecec",
-        color: "#e74c3c",
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-        direction: "rtl",
-      }}
-    >
-      {/* Header */}
-      <header
-        style={{
-          width: "100%",
-          backgroundColor: "#e74c3c",
-          color: "white",
-          padding: "20px 40px",
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "center",
-          boxSizing: "border-box",
-        }}
-      >
-        <h2 style={{ margin: 0 }}>
-          שלום {userName}
-        </h2>
-
-        <ButtonComponent
-          text="התנתק"
-          onClick={() => {
-            localStorage.removeItem("user");
-            navigate("/");
-          }}
-          style={{
-            backgroundColor: "white",
-            color: "#e74c3c",
-            border: "2px solid white",
-          }}
-        />
+    <div className="admin-dashboard">
+      <header className="admin-header">
+        <h2>שלום {userName}</h2>
+        <div className="logout-btn">
+          <ButtonComponent text="התנתק" onClick={logout} />
+        </div>
       </header>
+      {isHome && (
+        <>
+          <div className="admin-title">
+            <h1>אזור מנהל</h1>
+            <p>ניהול מערכת המיגוניות</p>
+          </div>
 
-      {/* כותרת */}
-      <div
-        style={{
-          marginTop: "50px",
-          marginBottom: "40px",
-          textAlign: "center",
-        }}
-      >
-        <h1>אזור מנהל</h1>
-        <p>ניהול מערכת המיגוניות</p>
+          <div className="admin-buttons">
+            <div className="dashboard-btn">
+              <ButtonComponent text="ניהול מיגוניות" onClick={() => navigate("/map")} />
+            </div>
+            <div className="dashboard-btn">
+              <ButtonComponent text="הוספת מיגונית" onClick={() => navigate("add-shelter")} />
+            </div>
+            <div className="dashboard-btn">
+              <ButtonComponent text="כל הבקשות" onClick={() => navigate("requests")} />
+            </div>
+            <div className="dashboard-btn">
+              <ButtonComponent text="ניהול משתמשים" onClick={() => navigate("users")} />
+            </div>
+            <div className="dashboard-btn">
+              <ButtonComponent text="פרופיל" onClick={() => navigate("profile")} />
+            </div>
+          </div>
+        </>
+      )}
+
+      <div className="admin-content">
+        <Outlet />
       </div>
 
-      {/* כפתורים */}
-      <div
-        style={{
-          display: "flex",
-          flexWrap: "wrap",
-          justifyContent: "center",
-          gap: "25px",
-          width: "80%",
-          maxWidth: "1000px",
-        }}
-      >
-        <ButtonComponent
-          text="ניהול מיגוניות"
-          onClick={() => navigate("/admin/shelters")}
-          style={{ width: "220px", height: "90px" }}
-        />
-
-        <ButtonComponent
-          text="הוספת מיגונית"
-          onClick={() => navigate("/add-shelter")}
-          style={{ width: "220px", height: "90px" }}
-        />
-
-        <ButtonComponent
-          text="כל הבקשות"
-          onClick={() => navigate("/admin/requests")}
-          style={{ width: "220px", height: "90px" }}
-        />
-
-        <ButtonComponent
-          text="ניהול משתמשים"
-          onClick={() => navigate("/admin/users")}
-          style={{ width: "220px", height: "90px" }}
-        />
-
-<ButtonComponent
-  text="הצגת משתמש"
-  onClick={() => navigate("/show-user")}
-  style={{ width: "220px", height: "90px" }}
-/>
-
-        <ButtonComponent
-          text="פרופיל"
-          onClick={() => navigate("/profile")}
-          style={{ width: "220px", height: "90px" }}
-        />
-      </div>
-
-      {/* Footer */}
-      <footer
-        style={{
-          marginTop: "auto",
-          width: "100%",
-          backgroundColor: "#e74c3c",
-          color: "white",
-          textAlign: "center",
-          padding: "20px",
-        }}
-      >
+      <footer className="admin-footer">
         © 2026 מערכת מיגוניות
       </footer>
     </div>

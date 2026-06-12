@@ -23,7 +23,7 @@ function HomePage() {
       </div>
 
       {/* כפתורים מרכזיים */}
-      <div className="main-buttons">      
+      <div className="main-buttons">
         <ButtonComponent text="צור קשר" onClick={() => navigate("/contact")} />
         <ButtonComponent text="אודותינו" onClick={() => navigate("/about")} />
         <ButtonComponent text="חיפוש מיגנות קרובה" onClick={() => navigate("/map")} />

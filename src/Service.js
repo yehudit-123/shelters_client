@@ -32,23 +32,7 @@ async function PutItems(url, body) {
 
     return data;
 }
-// async function PutItems(url, body, func) {
-//     const res = await fetch(`http://localhost:3001/${url}`, {
-//         method: "PUT",
-//         headers: { "Content-Type": "application/json" },
-//         body: JSON.stringify(body)
-//     })
 
-//     console.log(res);
-//     if (!res.ok) {
-//         throw new Error('something went wrong, please try again');
-//     }
-//     const data = await res.json();
-
-//     if (func) {
-//         func(data);
-//     }
-// }
 async function PostItems(url, body) {
     const res = await fetch(`http://localhost:3001/${url}`, {
         method: "POST",

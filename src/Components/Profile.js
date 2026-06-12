@@ -1,96 +1,60 @@
 import React from "react";
-import { useNavigate } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { GetItems } from "../Service";
 import ButtonComponent from "./ButtonComponent";
+import { toast } from "react-toastify";
+import { useCallback } from "react";
+import "../Style/CssPages/Profile.css";
 
 function Profile() {
+  const [myShelters, setMyShelters] = useState([]);
+  const [amountRequest, setAmountRequest] = useState(0);
+  const [amountShelters, setAmountShelters] = useState(0);
   const navigate = useNavigate();
+  const { id } = useParams();
 
   const user = JSON.parse(localStorage.getItem("user"));
+  const getSheltersById = useCallback(async () => {
+    try {
+      const data = await GetItems(`shelters/${id}`);
+      setMyShelters(data);
+    } catch (error) {
+      console.log(error);
+      toast.error("שגיאה בטעינת הבקשות");
+    }
+  }, [id]);
+
+  useEffect(() => {
+    getSheltersById();
+  }, [id, user, getSheltersById]);
+
+  useEffect(() => {
+    setAmountRequest(myShelters.length);
+    setAmountShelters(myShelters.filter(shelter => shelter.status === "approved").length);
+  }, [myShelters]);
 
   return (
-    <div
-      style={{
-        fontFamily: "Arial, sans-serif",
-        minHeight: "100vh",
-        backgroundColor: "#ffecec",
-        color: "#e74c3c",
-        direction: "rtl",
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-      }}
-    >
+    <div className="profile-container">
       {/* Header */}
-      <header
-        style={{
-          width: "100%",
-          backgroundColor: "#e74c3c",
-          color: "white",
-          padding: "20px",
-          textAlign: "center",
-          boxSizing: "border-box",
-        }}
-      >
+      <header className="profile-header">
         <h1>הפרופיל שלי</h1>
       </header>
-
-      {/* כרטיס פרופיל */}
-      <div
-        style={{
-          backgroundColor: "white",
-          marginTop: "50px",
-          padding: "30px",
-          borderRadius: "15px",
-          boxShadow: "0 4px 10px rgba(0,0,0,0.1)",
-          minWidth: "400px",
-        }}
-      >
-        <h2 style={{ textAlign: "center" }}>
+      {/* Profile Card */}
+      <div className="profile-card">
+        <h2 className="profile-name">
           👤 {user?.userName}
         </h2>
-
         <hr />
-
-        <p>
-          <strong>מזהה משתמש:</strong> {user?.userId}
-        </p>
-
-        <p>
-          <strong>שם משתמש:</strong> {user?.userName}
-        </p>
-
-        <p>
-          <strong>אימייל:</strong> {user?.email}
-        </p>
-
+        <p><strong>מזהה משתמש:</strong> {user?.userId}</p>
+        <p><strong>שם משתמש:</strong> {user?.userName}</p>
+        <p><strong>אימייל:</strong> {user?.email}</p>
         <hr />
+        <p><strong>מספר בקשות:</strong> {amountRequest}</p>
+        <p><strong>מספר מיגוניות שהוספתי:</strong> {amountShelters}</p>
 
-        {/* נתונים עתידיים */}
-        <p>
-          <strong>מספר בקשות:</strong> 0
-        </p>
-
-        <p>
-          <strong>מספר מיגוניות שהוספתי:</strong> 0
-        </p>
-
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "center",
-            gap: "15px",
-            marginTop: "25px",
-          }}
-        >
-          <ButtonComponent
-            text="הבקשות שלי"
-            onClick={() => navigate("/my-requests")}
-          />
-
-          <ButtonComponent
-            text="חזרה לדשבורד"
-            onClick={() => navigate("/dashboard")}
-          />
+        <div className="profile-buttons">
+          <ButtonComponent text="חזרה לדשבורד" onClick={() => navigate(-1)} />
         </div>
       </div>
     </div>

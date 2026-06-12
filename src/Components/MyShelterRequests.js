@@ -1,65 +1,63 @@
 import { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
 import { GetItems } from "../Service";
+import { toast } from "react-toastify";
+import { useCallback } from "react";
+import "../Style/CssPages/MyShelterRequests.css";
+
 
 function MyShelterRequests() {
   const [requests, setRequests] = useState([]);
   const [loading, setLoading] = useState(true);
-
-  const loadRequests = async () => {
+  const { id } = useParams();
+  const user = JSON.parse(localStorage.getItem("user"));
+  const getSheltersById = useCallback(async () => {
     try {
-      const user = JSON.parse(localStorage.getItem("user"));
-
-      const data = await GetItems("shelters");
-
-      // סינון רק בקשות של המשתמש
-      const myRequests = data.filter(
-        (s) => s.createdByUserId === user?.userId
-      );
-
-      setRequests(myRequests);
-    } catch (err) {
-      console.log(err);
-    } finally {
-      setLoading(false);
+      const data = await GetItems(`shelters/${id}`);
+      setRequests(data);
+    } catch (error) {
+      console.log(error);
+      toast.error("שגיאה בטעינת הבקשות");
     }
-  };
-
+  }, [id]);
+console.log(process.env.REACT_APP_GOOGLE_MAPS_API_KEY);
   useEffect(() => {
-    loadRequests();
-  }, []);
+    getSheltersById();
+    setLoading(false);
+  }, [id, user, getSheltersById]);
 
   return (
-    <div style={{ padding: "30px", direction: "rtl" }}>
-      <h2>הבקשות שלי</h2>
+    <div className="page">
+      <h2 className="title">הבקשות שלי</h2>
 
       {loading ? (
         <p>טוען...</p>
       ) : requests.length === 0 ? (
         <p>אין לך בקשות עדיין</p>
       ) : (
-        <table border="1" cellPadding="10" width="100%">
-          <thead>
-            <tr>
-              <th>שם מיגונית</th>
-              <th>כתובת</th>
-              <th>סטטוס</th>
-            </tr>
-          </thead>
+        <div className="table">
+          {requests.map((r) => (
+            <div key={r.shelterId} className="row">
+              <div className="box">{r.shelterName}</div>
+              <div className="box">{r.address}</div>
 
-          <tbody>
-            {requests.map((r) => (
-              <tr key={r.shelterId}>
-                <td>{r.shelterName}</td>
-                <td>{r.address}</td>
-                <td>
-                  {r.status === "pending"
-                    ? "ממתין לאישור 🟡"
+              <div
+                className={`status ${r.status === "pending"
+                    ? "yellow"
+                    : r.status === "reject"
+                      ? "red"
+                      : "green"
+                  }`}
+              >
+                {r.status === "pending"
+                  ? "ממתין לאישור🟡"
+                  : r.status === "reject"
+                    ? "סורב ❌"
                     : "מאושר 🟢"}
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+              </div>
+            </div>
+          ))}
+        </div>
       )}
     </div>
   );
