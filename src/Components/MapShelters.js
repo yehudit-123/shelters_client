@@ -3,6 +3,8 @@ import { useNavigate } from "react-router-dom";
 import { GoogleMap, useJsApiLoader, MarkerF } from "@react-google-maps/api";
 import '../Style/CssPages/MapShelters.css';
 import { GetItems } from "../Service";
+import { toast } from "react-toastify";
+
 
 const mapContainerStyle = {
   width: "100%",
@@ -50,7 +52,6 @@ function MapShelters() {
   const [sortedShelters, setSortedShelters] = useState([]);
   const [visibleCount, setVisibleCount] = useState(PAGE_SIZE);
 
-  // 1. טעינת כל המיגוניות
   async function loadShelters() {
     try {
       const data = await GetItems("shelters");
@@ -59,12 +60,10 @@ function MapShelters() {
       console.error("שגיאה בטעינת המיגוניות:", err);
     }
   }
-
   useEffect(() => {
     loadShelters();
   }, []);
 
-  // 2. קבלת מיקום משתמש
   useEffect(() => {
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
@@ -114,7 +113,7 @@ function MapShelters() {
   // 5. ניתוב מסלול ועדכון פרטי דרך
   const calculateRoute = useCallback((shelter) => {
     if (!userLocation) {
-      alert("אנא אשר הרשאת מיקום כדי לחשב מסלול");
+      toast.info("אנא אשר הרשאת מיקום כדי לחשב מסלול");
       return;
     }
 

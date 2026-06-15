@@ -6,6 +6,7 @@ import ButtonComponent from "./ButtonComponent";
 import { toast } from "react-toastify";
 import { useCallback } from "react";
 import "../Style/CssPages/Profile.css";
+import { PutItems } from "../Service";
 
 function Profile() {
   const [myShelters, setMyShelters] = useState([]);
@@ -13,8 +14,34 @@ function Profile() {
   const [amountShelters, setAmountShelters] = useState(0);
   const navigate = useNavigate();
   const { id } = useParams();
-
   const user = JSON.parse(localStorage.getItem("user"));
+
+  const [isEditing, setIsEditing] = useState(false);
+const [editUserName, setEditUserName] = useState(user?.userName || "");
+const [editEmail, setEditEmail] = useState(user?.email || "");
+
+const updateUser = async () => {
+  try {
+    const updatedUser = {
+      ...user,
+      userName: editUserName,
+      email: editEmail
+    };
+
+    const data = await PutItems(`users/${user.userId}`, updatedUser);
+
+    // עדכון localStorage
+    localStorage.setItem("user", JSON.stringify(data || updatedUser));
+
+    setIsEditing(false);
+
+    toast.success("הפרטים עודכנו בהצלחה");
+  } catch (error) {
+    console.log(error);
+    toast.error("שגיאה בעדכון המשתמש");
+  }
+};
+
   const getSheltersById = useCallback(async () => {
     try {
       const data = await GetItems(`shelters/${id}`);
@@ -46,9 +73,48 @@ function Profile() {
           👤 {user?.userName}
         </h2>
         <hr />
-        <p><strong>מזהה משתמש:</strong> {user?.userId}</p>
-        <p><strong>שם משתמש:</strong> {user?.userName}</p>
-        <p><strong>אימייל:</strong> {user?.email}</p>
+        {isEditing ? (
+  <div className="edit-user-form">
+    <h3>עריכת פרטים</h3>
+
+    <input
+      type="text"
+      value={editUserName}
+      onChange={(e) => setEditUserName(e.target.value)}
+      placeholder="שם משתמש"
+    />
+
+    <input
+      type="email"
+      value={editEmail}
+      onChange={(e) => setEditEmail(e.target.value)}
+      placeholder="אימייל"
+    />
+
+    <div className="edit-buttons">
+      <ButtonComponent text="שמור" onClick={updateUser} />
+      <ButtonComponent
+        text="ביטול"
+        onClick={() => setIsEditing(false)}
+      />
+    </div>
+  </div>
+) : (
+  <>
+    <p><strong>מזהה משתמש:</strong> {user?.userId}</p>
+    <p><strong>שם משתמש:</strong> {user?.userName}</p>
+    <p><strong>אימייל:</strong> {user?.email}</p>
+
+    <ButtonComponent
+      text="ערוך פרטים"
+      onClick={() => {
+        setEditUserName(user?.userName);
+        setEditEmail(user?.email);
+        setIsEditing(true);
+      }}
+    />
+  </>
+)}
         <hr />
         <p><strong>מספר בקשות:</strong> {amountRequest}</p>
         <p><strong>מספר מיגוניות שהוספתי:</strong> {amountShelters}</p>
