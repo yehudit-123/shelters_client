@@ -19,6 +19,10 @@ function AllShelters() {
   const [shelters, setShelters] = useState([]);
   const [likedShelters, setLikedShelters] = useState(new Set());
 
+  const [searchText, setSearchText] = useState("");
+const [selectedType, setSelectedType] = useState("");
+const [sortBy, setSortBy] = useState("");
+
   // סטייט לניהול תגובות
   const [activeCommentsShelterId, setActiveCommentsShelterId] = useState(null);
   const [reviews, setReviews] = useState({});
@@ -156,13 +160,67 @@ function AllShelters() {
     }
   };
 
+  let filteredShelters = [...shelters];
+
+// חיפוש לפי שם או כתובת
+if (searchText) {
+  filteredShelters = filteredShelters.filter(
+    (shelter) =>
+      shelter.shelterName?.toLowerCase().includes(searchText.toLowerCase()) ||
+      shelter.address?.toLowerCase().includes(searchText.toLowerCase())
+  );
+}
+
+// סינון לפי סוג
+if (selectedType) {
+  filteredShelters = filteredShelters.filter(
+    (shelter) => shelter.type === selectedType
+  );
+}
+
+// מיון לפי לייקים
+if (sortBy === "likes") {
+  filteredShelters.sort(
+    (a, b) => (b.likesCount || 0) - (a.likesCount || 0)
+  );
+}
+
   return (
     <div className="all-shelters-page">
+      <h1 className="page-title">רשימת מיגוניות</h1>
+      <div className="filters-container">
+
+  <input
+    type="text"
+    placeholder="חיפוש לפי שם או כתובת..."
+    value={searchText}
+    onChange={(e) => setSearchText(e.target.value)}
+  />
+
+  <select
+    value={selectedType}
+    onChange={(e) => setSelectedType(e.target.value)}
+  >
+    <option value="">כל הסוגים</option>
+    <option value="מיגונית">מיגונית</option>
+    <option value="מקלט">מקלט</option>
+    <option value="מרחב מוגן">מרחב מוגן</option>
+  </select>
+
+  <select
+    value={sortBy}
+    onChange={(e) => setSortBy(e.target.value)}
+  >
+    <option value="">ללא מיון</option>
+    <option value="likes">הכי אהובות ❤️</option>
+  </select>
+
+</div>
       <ButtonComponent text="← חזור לדף הבית" onClick={() => navigate(-1)} />
       <ButtonComponent text="לתצוגה במפה" onClick={() => navigate(`/dashboard/${id}/shelters-map`) } />
       <h1 className="page-title">רשימת מיגוניות</h1>
       <div className="shelters-grid">
-        {shelters.map((shelter) => {
+      {filteredShelters.map((shelter) =>  {
           const liked = likedShelters.has(`${shelter.type}_${shelter.shelterId}`);
           const isCommentsOpen = activeCommentsShelterId === shelter.shelterId;
           const isReportOpen = activeReportShelterId === shelter.shelterId;
