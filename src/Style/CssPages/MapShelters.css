@@ -109,3 +109,12 @@ html, body, #root {
 .map-view > div {
   height: 100% !important;
 }
+.details-btn{
+  margin: 5px 0 0 0;
+  font-weight: bold;
+  color: #e74c3c;
+  font-size: 14px;
+  border: 2px solid #e74c3c;
+  background-color: #fffaf9;
+  border-radius: 8ch;
+}

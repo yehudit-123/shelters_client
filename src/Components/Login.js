@@ -46,7 +46,6 @@ function Login() {
         <h2 className="login-title">התחברות</h2>
         <input type="text" placeholder="שם משתמש" value={username} onChange={(e) => setUsername(e.target.value)} required className="login-input"/>
         <input type="password" placeholder="סיסמה" value={password} onChange={(e) => setPassword(e.target.value)} required className="login-input" />
-
         <button type="submit" className="login-button" > התחבר </button>
       </form>
     </div>

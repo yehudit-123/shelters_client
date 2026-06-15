@@ -23,7 +23,6 @@ function MyShelterRequests() {
       toast.error("שגיאה בטעינת הבקשות");
     }
   }, [id]);
-console.log(process.env.REACT_APP_GOOGLE_MAPS_API_KEY);
   useEffect(() => {
     getSheltersById();
     setLoading(false);

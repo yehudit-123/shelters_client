@@ -1,8 +1,14 @@
 import "../Style/CssPages/EmergencyGuide.css";
+import { useNavigate } from "react-router-dom";
+import ButtonComponent from "./ButtonComponent";
+
 function EmergencyGuide() {
+    const navigate = useNavigate();
+  
   return (
     <div className="emergency-container">
       <div className="emergency-box">
+        <ButtonComponent text="חזור" onClick={() => navigate(-1)}/>
 
         <h1 className="emergency-title">
           הנחיות חירום ובטיחות

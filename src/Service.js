@@ -10,8 +10,9 @@
         }
         throw new Error(errorData.message || "Request failed");
     }
+    const data = await res.json();
 
-    return await res.json();
+    return data;
 }
 
 async function PutItems(url, body) {
@@ -59,8 +60,6 @@ async function DeleteItems(url) {
     if (!res.ok) {
         throw new Error("something went wrong, please try again");
     }
-
-    // ניסיון לקרוא JSON רק אם יש
     let data;
     try {
         data = await res.json();
@@ -72,34 +71,3 @@ async function DeleteItems(url) {
 }
 
 export { DeleteItems, PutItems, PostItems ,GetItems}
-
-// | פעולה               | Method | Route        |
-// | ------------------- | ------ | ------------ |
-// | התחברות             | POST   | /users/login |
-// | קבלת כל המשתמשים    | GET    | /users       |
-// | קבלת משתמש לפי מזהה | GET    | /users/:id   |
-// | הוספת משתמש         | POST   | /users       |
-// | מחיקת משתמש         | DELETE | /users/:id   |
-// | עדכון משתמש         | PUT    | /users/:id   |
-
-//התחברות
-// const result = await PostItems(
-//     "users/login",
-//     {
-//         userName: username,
-//         passwordHash: password
-//     }
-// );
-
-//הוספת משתמש
-// await PostItems(
-//     "users",
-//     {
-//         userName: "David",
-//         email: "david@gmail.com",
-//         phone: "0501234567"
-//     }
-// );
-
-//מחיקת משתמש
-// await DeleteItems("users/5");

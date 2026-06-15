@@ -48,11 +48,16 @@ function UserDashboard() {
 
           {/* Buttons */}
           <div className="user-buttons">
-            <ButtonComponent text="חיפוש מיגנות קרובה" onClick={() => navigate("/map")} />
+            <div className="critical-button-container">
+              <ButtonComponent text="חיפוש מיגונית קרובה" onClick={() => navigate("/map")} className="critical-btn" />
+            </div>
             <ButtonComponent text="הוספת מיגונית" onClick={() => navigate("add-shelter")} />
             <ButtonComponent text="רשימת מקומות בטוחים" onClick={() => navigate("safe-places")} />
             <ButtonComponent text="פרופיל" onClick={() => navigate("profile")} />
             <ButtonComponent text="הבקשות שלי" onClick={() => navigate("my-requests")} />
+                      <ButtonComponent text="צור קשר" onClick={() => navigate("contact")} />
+              
+            <ButtonComponent text="אתר צבע אדום" onClick={() => window.open("https://www.oref.org.il/", "_blank")} className="red-alert-btn" />
           </div>
         </>
       )}

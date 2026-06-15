@@ -8,6 +8,8 @@ function AdminShelters() {
   const loadShelters = async () => {
     try {
       const data = await GetItems("shelters");
+    console.log(data);
+    
       setShelters(data);
     } catch (err) {
       console.log(err);
@@ -37,6 +39,8 @@ function AdminShelters() {
 
   const pending = shelters.filter((s) => s.status === "pending");
   const approved = shelters.filter((s) => s.status === "approved");
+  const reject = shelters.filter((s) => s.status === "reject");
+console.log(pending,approved,reject);
 
   return (
     <div style={{ padding: "30px", direction: "rtl" }}>

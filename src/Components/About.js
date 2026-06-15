@@ -1,8 +1,15 @@
 import "../Style/CssPages/About.css";
+import { useNavigate } from "react-router-dom";
+import ButtonComponent from "./ButtonComponent";
 function About() {
+  const navigate = useNavigate();
+  
   return (
     <div className="about-container">
+
       <div className="about-box">
+                                        <ButtonComponent text="חזור" onClick={() => navigate(-1)}/>
+
         <h1 className="about-title">אודות</h1>
 
         <p className="about-text">
