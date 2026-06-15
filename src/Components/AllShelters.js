@@ -42,11 +42,24 @@ const [sortBy, setSortBy] = useState("");
     id: 'google-map-script',
     googleMapsApiKey: process.env.REACT_APP_GOOGLE_MAPS_API_KEY,
   });
-
+  //מדבר ואמר כמה מיגוניות נמצאו
+  const speak = (text) => {
+    const msg = new SpeechSynthesisUtterance(text);
+    msg.lang = "he-IL";
+    window.speechSynthesis.cancel(); // כדי שלא יצטברו קולות
+    window.speechSynthesis.speak(msg);
+  };
   useEffect(() => {
     loadShelters();
     loadUserLikes();
   }, []);
+  useEffect(() => {
+    if (shelters.length > 0) {
+      speak(`נמצאו ${shelters.length} מיגוניות ברשימה`);
+    }
+  }, [shelters]);
+
+
 
   async function loadShelters() {
     try {
