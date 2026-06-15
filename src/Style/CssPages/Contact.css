@@ -1,55 +1,254 @@
-.contact-container {
-    font-family: Arial, sans-serif;
-    min-height: 100vh;
-    background-color: #ffecec;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: 20px;
-  }
-  
-  .contact-form {
-    width: 100%;
-    max-width: 500px;
-    background-color: white;
-    padding: 40px;
+/* --- קונטיינרים כלליים --- */
+.back{
+   display: flex;
+  justify-content: center;
+  gap: 15px;
+  margin-top: 25px;
+}
+.contact-container, .admin-messages-container {
+    max-width: 700px;
+    margin: 40px auto;
+    padding: 30px;
+    background-color: #ffffff;
     border-radius: 12px;
-    border: 2px solid #e74c3c;
-    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+    direction: rtl;
+}
+
+.contact-title {
+    font-size: 28px;
+    color: #333333;
+    margin-bottom: 25px;
+    text-align: center;
+    font-weight: 700;
+}
+
+/* --- עיצוב הטופס (משתמש רגיל) --- */
+.contact-form {
     display: flex;
     flex-direction: column;
     gap: 15px;
-  }
-  
-  .contact-title {
-    text-align: center;
-    color: #e74c3c;
-  }
-  
-  .contact-input {
-    padding: 12px;
+}
+
+.contact-input, .contact-textarea {
+    width: 100%;
+    padding: 12px 15px;
+    border: 1px solid #e0e0e0;
     border-radius: 8px;
-    border: 1px solid #ccc;
-  }
-  
-  .contact-textarea {
+    font-size: 16px;
+    background-color: #f9f9f9;
+    transition: all 0.3s ease;
+    box-sizing: border-box;
+}
+
+.contact-input:focus, .contact-textarea:focus {
+    border-color: #007bff;
+    background-color: #ffffff;
+    outline: none;
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.2);
+}
+
+.contact-textarea {
+    min-height: 150px;
+    resize: vertical;
+}
+
+.contact-button {
     padding: 12px;
-    border-radius: 8px;
-    border: 1px solid #ccc;
-    min-height: 120px;
-    resize: none;
-  }
-  
-  .contact-button {
-    padding: 12px;
-    background-color: #e74c3c;
+    background-color: #007bff;
     color: white;
     border: none;
     border-radius: 8px;
     font-size: 16px;
+    font-weight: 600;
     cursor: pointer;
-  }
-  
-  .contact-button:hover {
-    background-color: #ff5757;
-  }
+    transition: background-color 0.2s ease;
+}
+
+.contact-button:hover {
+    background-color: #0056b3;
+}
+
+/* --- עיצוב תצוגת מנהל (Admin Messages) --- */
+.no-messages {
+    text-align: center;
+    color: #666666;
+    font-size: 16px;
+}
+
+.messages-list {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    margin-top: 20px;
+}
+
+.message-card {
+    border: 1px solid #e2e8f0;
+    border-radius: 10px;
+    padding: 20px;
+    background-color: #f8fafc;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.message-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px;
+    border-bottom: 1px solid #e2e8f0;
+    padding-bottom: 10px;
+}
+
+.message-header h3 {
+    margin: 0;
+    font-size: 18px;
+    color: #1e293b;
+}
+
+.message-body {
+    font-size: 16px;
+    color: #334155;
+    line-height: 1.6;
+    margin: 5px 0;
+}
+
+/* --- תגיות משתמשים (Badges) וכפתור העתקה --- */
+.user-badge {
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.user-badge.מזוהה {
+    background-color: #d1fae5;
+    color: #065f46;
+}
+
+.anonymous-sender {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.user-badge.אנונימי {
+    background-color: #fee2e2;
+    color: #991b1b;
+}
+
+.copy-email-btn {
+    background-color: #edf2f7;
+    border: 1px solid #cbd5e1;
+    border-radius: 6px;
+    padding: 4px 8px;
+    font-size: 13px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.copy-email-btn:hover {
+    background-color: #e2e8f0;
+    color: #1e293b;
+}
+
+/* --- אזור תגובת מנהל --- */
+.reply-section {
+    margin-top: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.reply-textarea {
+    width: 100%;
+    min-height: 80px;
+    padding: 10px;
+    border: 1px solid #cbd5e1;
+    border-radius: 6px;
+    font-size: 14px;
+    box-sizing: border-box;
+    resize: none;
+}
+
+.reply-button {
+    align-self: flex-end;
+    padding: 8px 16px;
+    background-color: #10b981;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.reply-button:hover {
+    background-color: #059669;
+}
+/* --- רכיב עוטף לאימייל האינטראקטיבי --- */
+.copyable-email-wrapper {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px; /* רווח בין המייל לסמל */
+    cursor: pointer;
+    position: relative;
+    padding: 2px 4px;
+    border-radius: 4px;
+    transition: background-color 0.2s ease;
+}
+
+/* אפקט מודגש כשעוברים על המייל */
+.copyable-email-wrapper:hover {
+    background-color: #f1f3f4; /* גוון אפרפר עדין כמו ב-Gmail */
+}
+
+.copyable-email-wrapper:hover .email-text {
+    text-decoration: underline;
+    color: #1a73e8; /* כחול Gmail */
+}
+
+/* הטקסט של המייל עצמו */
+.email-text {
+    font-size: 14px;
+    color: #3c4043;
+    transition: all 0.2s ease;
+}
+
+/* === עיצוב סמל ההעתקה (Clipboard) - מבוסס CSS בלבד! === */
+.copy-icon-css {
+    width: 12px;
+    height: 14px;
+    border: 1.5px solid #5f6368; /* צבע אפור נייטרלי */
+    border-radius: 2px;
+    position: relative;
+    
+    /* הפיכה לחבוי כברירת מחדל */
+    opacity: 0; 
+    transform: scale(0.8);
+    transition: all 0.2s ease-in-out;
+}
+
+/* הדף ה"אחורי" שמייצר את אפקט ה-Clipboard */
+.copy-icon-css::after {
+    content: '';
+    position: absolute;
+    width: 12px;
+    height: 14px;
+    border: 1.5px solid #5f6368;
+    border-radius: 2px;
+    top: -4px;
+    right: -4px;
+    background-color: white; /* כדי להסתיר את הדף שמתחת */
+}
+
+/* === הרגע הגדול: הצגת הסמל בזמן HOVER בלבד === */
+.copyable-email-wrapper:hover .copy-icon-css {
+    opacity: 1; /* הופך לנראה */
+    transform: scale(1); /* גדל לגודל מלא */
+}

@@ -54,6 +54,9 @@ function AdminDashboard() {
             <div className="dashboard-btn">
               <ButtonComponent text="כל הבקשות" onClick={() => navigate("requests")} />
             </div>
+             <div className="dashboard-btn">
+              <ButtonComponent text="כל ההודעות" onClick={() => navigate("contact")} />
+            </div>
             <div className="dashboard-btn">
               <ButtonComponent text="ניהול משתמשים" onClick={() => navigate("users")} />
             </div>
