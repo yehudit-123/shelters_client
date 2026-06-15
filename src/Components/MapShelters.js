@@ -2,6 +2,7 @@ import React, { useState, useEffect, useCallback } from "react";
 import { useNavigate } from "react-router-dom"; // ייבוא לניווט חזרה
 import { GoogleMap, useJsApiLoader, MarkerF, DirectionsRenderer } from "@react-google-maps/api";
 import '../Style/CssPages/MapShelters.css';
+import { useRef } from "react";
 import { GetItems } from "../Service";
 
 const mapContainerStyle = {
@@ -16,12 +17,12 @@ const calculateDistance = (lat1, lon1, lat2, lon2) => {
   const R = 6371; // רדיוס כדור הארץ בקילומטרים
   const dLat = (lat2 - lat1) * Math.PI / 180;
   const dLon = (lon2 - lon1) * Math.PI / 180;
-  const a = 
-    Math.sin(dLat/2) * Math.sin(dLat/2) +
-    Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) * Math.sin(dLon/2) * Math.sin(dLon/2);
-  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+  const a =
+    Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+    Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) * Math.sin(dLon / 2) * Math.sin(dLon / 2);
+  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
   const distanceKm = R * c;
-  
+
   // אם המרחק קטן מקילומטר, נחזיר במטרים, אחרת בקילומטרים
   if (distanceKm < 1) {
     return { value: distanceKm, text: `${Math.round(distanceKm * 1000)} מטרים` };
@@ -35,11 +36,13 @@ function MapShelters() {
     id: 'google-map-script',
     googleMapsApiKey: process.env.REACT_APP_GOOGLE_MAPS_API_KEY,
   });
-
+  const routeRequestId = useRef(0);
   const [userLocation, setUserLocation] = useState(null);
   const [directionsResponse, setDirectionsResponse] = useState(null);
   const [selectedShelter, setSelectedShelter] = useState(null);
   const [shelters, setShelters] = useState([]);
+  const [expandedShelter, setExpandedShelter] = useState(null);
+  const [routeInfo, setRouteInfo] = useState({});
   const [closestShelters, setClosestShelters] = useState([]); // שמירת 5 המיגוניות הקרובות
 
   // 1. טעינת כל המיגוניות
@@ -77,7 +80,7 @@ function MapShelters() {
     if (userLocation && shelters.length > 0) {
       const sheltersWithDistance = shelters.map(shelter => {
         const distanceData = calculateDistance(
-          userLocation.lat, userLocation.lng, 
+          userLocation.lat, userLocation.lng,
           shelter.latitude, shelter.longitude
         );
         return {
@@ -86,66 +89,63 @@ function MapShelters() {
           distanceText: distanceData.text    // לטובת התצוגה למשתמש (מחרוזת)
         };
       });
-
       // מיון מהקרוב לרחוק ולקיחת ה-5 הראשונים
-      const sorted = sheltersWithDistance
-        .sort((a, b) => a.distanceValue - b.distanceValue)
-        .slice(0, 5);
-        
+      const sorted = sheltersWithDistance.sort((a, b) => a.distanceValue - b.distanceValue).slice(0, 5);
       setClosestShelters(sorted);
     } else {
       // אם אין מיקום, פשוט נציג 5 מיגוניות כלשהן או את כולן
       setClosestShelters(shelters.slice(0, 5));
     }
   }, [userLocation, shelters]);
-
   // 4. פונקציית החזרה לדשבורד
   const handleBackToDashboard = () => {
     const userId = localStorage.getItem("userId");
     const userRole = localStorage.getItem("userRole"); // נניח שזה "admin" או "user"
-
     if (!userId) {
       navigate("/"); // אם אין משתמש מחובר נזרוק לדף הבית
       return;
     }
-
     if (userRole === "admin") {
       navigate(`/admin-dashboard/${userId}`);
     } else {
       navigate(`/dashboard/${userId}`);
     }
   };
-
   // 5. ניתוב מסלול
   const calculateRoute = useCallback((shelter) => {
-    if (!userLocation) {
-      alert("אנא אשר הרשאת מיקום כדי לחשב מסלול");
-      return;
-    }
-    
-    // 1. איפוס המסלול הקודם כדי למנוע כפילויות או תקיעות
-    setDirectionsResponse(null); 
-    setSelectedShelter(shelter);
-    
-    const directionsService = new window.google.maps.DirectionsService();
-    
-    directionsService.route(
-      {
-        origin: userLocation,
-        destination: { lat: shelter.latitude, lng: shelter.longitude },
-        travelMode: window.google.maps.TravelMode.WALKING
+  if (!userLocation) {
+    alert("אנא אשר הרשאת מיקום כדי לחשב מסלול");
+    return;
+  }
+
+  const currentRequest = ++routeRequestId.current;
+
+  setSelectedShelter(shelter);
+  setDirectionsResponse(null);
+
+  const directionsService = new window.google.maps.DirectionsService();
+
+  directionsService.route(
+    {
+      origin: userLocation,
+      destination: {
+        lat: Number(shelter.latitude),
+        lng: Number(shelter.longitude)
       },
-      (result, status) => {
-        if (status === window.google.maps.DirectionsStatus.OK) {
-          // 2. השמת המסלול החדש
-          setDirectionsResponse(result);
-        } else {
-          console.error("שגיאה בחישוב מסלול:", status);
-          alert("לא נמצא מסלול הליכה פנוי למיגונית זו.");
-        }
+      travelMode: window.google.maps.TravelMode.WALKING,
+    },
+    (result, status) => {
+      // 🔴 אם כבר נשלחה בקשה חדשה – מתעלמים מהישנה
+      if (currentRequest !== routeRequestId.current) return;
+
+      if (status === "OK") {
+        setDirectionsResponse(result);
+      } else {
+        console.log(status);
       }
-    );
-  }, [userLocation]);
+    }
+  );
+}, [userLocation]);
 
   // הגדרת אייקונים אישיים (שימי כאן קישורים לתמונות שתרצי או ייבוא מקומי)
   const userIcon = "http://maps.google.com/mapfiles/ms/icons/blue-dot.png"; // אייקון כחול למשתמש
@@ -155,60 +155,59 @@ function MapShelters() {
 
   return (
     <div className="map-page-container">
-      
       {/* צד ימין: רשימת המיגוניות */}
       <div className="sidebar">
         {/* כפתור חזרה */}
-        <button className="back-btn" onClick={handleBackToDashboard}>
-          ➔ חזרה לאזור האישי
-        </button>
-
+        <button className="back-btn" onClick={() => navigate(-1)}>➔ חזרה לאזור האישי</button>
         <h2 className="sidebar-title">5 המיגוניות הקרובות אלייך</h2>
-        
         {closestShelters.map((shelter) => (
-          <div 
-            key={shelter.shelterId}
-            onClick={() => calculateRoute(shelter)}
-            className={`shelter-card ${selectedShelter?.shelterId === shelter.shelterId ? 'selected' : ''}`}
-          >
+          <div key={shelter.shelterId} onClick={() => calculateRoute(shelter)}
+            className={`shelter-card ${selectedShelter?.shelterId === shelter.shelterId ? 'selected' : ''}`}>
             <h3 className="shelter-name">{shelter.shelterName}</h3>
             <p className="shelter-address">כתובת: {shelter.address}</p>
             {/* הצגת המרחק המחושב */}
             <p className="shelter-distance">מרחק: {shelter.distanceText || "לא ידוע"}</p>
+            {shelter.shelterId === routeInfo.shelterId && (
+              <>
+                <p>🚶 זמן הליכה: {routeInfo.duration}</p>
+                <p>📍 מרחק במסלול: {routeInfo.distance}</p>
+              </>
+            )}
+            <button className="likes-btn" onClick={(e) => { e.stopPropagation(); }}>
+              👍 {shelter.likesCount}
+            </button>
+            <button onClick={(e) => {
+              e.stopPropagation();
+              setExpandedShelter(expandedShelter === shelter.shelterId ? null : shelter.shelterId);
+            }}
+            >פרטים נוספים</button>
+            {expandedShelter === shelter.shelterId && (
+              <div className="extra-details">
+                <p>סוג: {shelter.type}</p>
+                <p>סטטוס: {shelter.status}</p>
+                <p>נוספה ע"י: {shelter.createdByUserId}</p>
+              </div>
+            )}
           </div>
         ))}
       </div>
-
       {/* צד שמאל: המפה */}
       <div className="map-view">
-        <GoogleMap
-          mapContainerStyle={mapContainerStyle}
-          zoom={userLocation ? 16 : 14} // זום קרוב יותר אם יש מיקום
-          center={userLocation || defaultCenter}
-        >
+        <GoogleMap mapContainerStyle={mapContainerStyle} zoom={userLocation ? 16 : 14} // זום קרוב יותר אם יש מיקום
+          center={userLocation || defaultCenter}>
           {userLocation && (
-            <MarkerF 
-              position={userLocation} 
-              icon={{ url: userIcon }} // אייקון משתמש
+            <MarkerF position={userLocation} icon={{ url: userIcon }} // אייקון משתמש
             />
           )}
-
           {closestShelters.map(shelter => (
-            <MarkerF
-              key={shelter.shelterId}
-              position={{ lat: shelter.latitude, lng: shelter.longitude }}
-              onClick={() => calculateRoute(shelter)}
-              icon={{ url: shelterIcon }} // אייקון מיגונית
+            <MarkerF key={shelter.shelterId} position={{ lat: shelter.latitude, lng: shelter.longitude }}
+              onClick={() => calculateRoute(shelter)} icon={{ url: shelterIcon }} // אייקון מיגונית
             />
           ))}
-
-          {directionsResponse && selectedShelter && (
-            <DirectionsRenderer 
-              key={selectedShelter.shelterId} // המפתח מכריח ציור מחדש בכל בחירה
-              options={{ 
-                directions: directionsResponse,
-                suppressMarkers: true 
-              }} 
+          {directionsResponse && (
+            <DirectionsRenderer
+              key={selectedShelter?.shelterId}
+              directions={directionsResponse}
             />
           )}
         </GoogleMap>

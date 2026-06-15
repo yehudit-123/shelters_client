@@ -5,7 +5,12 @@
   padding: 30px;
   font-family: Arial, sans-serif;
 }
-
+.back{
+   display: flex;
+  justify-content: center;
+  gap: 15px;
+  margin-top: 25px;
+}
 .title {
   text-align: center;
   font-size: 34px;

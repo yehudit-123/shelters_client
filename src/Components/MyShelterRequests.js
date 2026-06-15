@@ -3,11 +3,14 @@ import { useParams } from "react-router-dom";
 import { GetItems } from "../Service";
 import { toast } from "react-toastify";
 import { useCallback } from "react";
+import { useNavigate } from "react-router-dom";
+import ButtonComponent from "./ButtonComponent";
 import "../Style/CssPages/MyShelterRequests.css";
 
 
 function MyShelterRequests() {
   const [requests, setRequests] = useState([]);
+    const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
   const { id } = useParams();
   const user = JSON.parse(localStorage.getItem("user"));
@@ -28,6 +31,8 @@ console.log(process.env.REACT_APP_GOOGLE_MAPS_API_KEY);
 
   return (
     <div className="page">
+            <div className="back"><ButtonComponent text="חזור" onClick={() => navigate(-1)} /></div>
+
       <h2 className="title">הבקשות שלי</h2>
 
       {loading ? (

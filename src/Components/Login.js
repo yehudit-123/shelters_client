@@ -41,7 +41,7 @@ function Login() {
     <div className="login-container">
       <form className="login-form" onSubmit={handleLogin}>
         <div className="back-button">
-          <ButtonComponent text="← חזור לדף הבית" onClick={() => navigate(`/`)} />
+          <ButtonComponent text="← חזור לדף הבית" onClick={() => navigate(-1)} />
         </div>
         <h2 className="login-title">התחברות</h2>
         <input type="text" placeholder="שם משתמש" value={username} onChange={(e) => setUsername(e.target.value)} required className="login-input"/>
