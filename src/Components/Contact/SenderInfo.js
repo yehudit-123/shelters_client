@@ -1,4 +1,6 @@
 import { toast } from "react-toastify";
+import "../../Style/CssPages/Contact.css";
+
 
 function SenderInfo({ message }) {
   const handleCopyEmail = () => {

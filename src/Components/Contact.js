@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import ButtonComponent from "./ButtonComponent";
-import ContactForm from "./Contact/ContactForm";
-import AdminMessagesPanel from "./Contact/AdminMessagesPanel";
+import ContactForm from "./contact/ContactForm";
+import AdminMessagesPanel from "./contact/AdminMessagesPanel.js";
 import "../Style/CssPages/Contact.css";
 
 function Contact() {

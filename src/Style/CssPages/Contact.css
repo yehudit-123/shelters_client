@@ -173,6 +173,14 @@
     font-size: 14px;
     box-sizing: border-box;
     resize: none;
+    transition: all 0.3s ease;
+}
+
+.reply-textarea:focus {
+    border-color: #10b981;
+    background-color: #ffffff;
+    outline: none;
+    box-shadow: 0 0 5px rgba(16, 185, 129, 0.2);
 }
 
 .reply-button {
@@ -191,11 +199,34 @@
 .reply-button:hover {
     background-color: #059669;
 }
+
+/* --- תגובה שכבר נשלחה --- */
+.admin-response {
+    background-color: #d1fae5;
+    border-right: 3px solid #10b981;
+    border-radius: 6px;
+    padding: 12px 14px;
+}
+
+.admin-response strong {
+    font-size: 13px;
+    color: #065f46;
+    display: block;
+    margin-bottom: 6px;
+}
+
+.admin-response p {
+    margin: 0;
+    font-size: 14px;
+    color: #334155;
+    line-height: 1.6;
+}
+
 /* --- רכיב עוטף לאימייל האינטראקטיבי --- */
 .copyable-email-wrapper {
     display: inline-flex;
     align-items: center;
-    gap: 8px; /* רווח בין המייל לסמל */
+    gap: 8px;
     cursor: pointer;
     position: relative;
     padding: 2px 4px;
@@ -203,38 +234,32 @@
     transition: background-color 0.2s ease;
 }
 
-/* אפקט מודגש כשעוברים על המייל */
 .copyable-email-wrapper:hover {
-    background-color: #f1f3f4; /* גוון אפרפר עדין כמו ב-Gmail */
+    background-color: #f1f3f4;
 }
 
 .copyable-email-wrapper:hover .email-text {
     text-decoration: underline;
-    color: #1a73e8; /* כחול Gmail */
+    color: #1a73e8;
 }
 
-/* הטקסט של המייל עצמו */
 .email-text {
     font-size: 14px;
     color: #3c4043;
     transition: all 0.2s ease;
 }
 
-/* === עיצוב סמל ההעתקה (Clipboard) - מבוסס CSS בלבד! === */
 .copy-icon-css {
     width: 12px;
     height: 14px;
-    border: 1.5px solid #5f6368; /* צבע אפור נייטרלי */
+    border: 1.5px solid #5f6368;
     border-radius: 2px;
     position: relative;
-    
-    /* הפיכה לחבוי כברירת מחדל */
-    opacity: 0; 
+    opacity: 0;
     transform: scale(0.8);
     transition: all 0.2s ease-in-out;
 }
 
-/* הדף ה"אחורי" שמייצר את אפקט ה-Clipboard */
 .copy-icon-css::after {
     content: '';
     position: absolute;
@@ -244,11 +269,10 @@
     border-radius: 2px;
     top: -4px;
     right: -4px;
-    background-color: white; /* כדי להסתיר את הדף שמתחת */
+    background-color: white;
 }
 
-/* === הרגע הגדול: הצגת הסמל בזמן HOVER בלבד === */
 .copyable-email-wrapper:hover .copy-icon-css {
-    opacity: 1; /* הופך לנראה */
-    transform: scale(1); /* גדל לגודל מלא */
+    opacity: 1;
+    transform: scale(1);
 }

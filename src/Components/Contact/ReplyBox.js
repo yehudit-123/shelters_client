@@ -1,5 +1,7 @@
 import { useState } from "react";
 import { toast } from "react-toastify";
+import "../../Style/CssPages/Contact.css";
+
 
 function ReplyBox({ messageId, onSubmit }) {
   const [replyText, setReplyText] = useState("");

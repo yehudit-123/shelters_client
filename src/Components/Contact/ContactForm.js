@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { PostItems } from "../../Service";
 import { toast } from "react-toastify";
+import "../../Style/CssPages/Contact.css";
+
 
 function ContactForm({ user }) {
   const [name, setName] = useState(user?.userName || "");

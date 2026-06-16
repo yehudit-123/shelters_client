@@ -48,6 +48,7 @@ function App() {
         <Route path="/admin-dashboard/:id" element={<AdminDashboard />}>
           {/* <Route path="shelters" element={<MapShelters />} /> */}
           <Route path="add-shelter" element={<AddShelter />} />
+          <Route path="safe-places" element={<AllShelters />} />
           <Route path="contact" element={<Contact />} />
           <Route path="requests" element={<Requests />} />
           <Route path="users" element={<ShowUser />} />

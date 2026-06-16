@@ -1,4 +1,5 @@
 import SenderInfo from "./SenderInfo";
+import "../../Style/CssPages/Contact.css";
 import ReplyBox from "./ReplyBox";
 
 function MessageCard({ message, onReply }) {

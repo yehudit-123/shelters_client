@@ -46,7 +46,10 @@ function AdminDashboard() {
 
           <div className="admin-buttons">
             <div className="dashboard-btn">
-              <ButtonComponent text="ניהול מיגוניות" onClick={() => navigate("/map")} />
+              <ButtonComponent text="חיפוש מיגונית קרובה" onClick={() => navigate("/map")} />
+            </div>
+            <div className="dashboard-btn">
+              <ButtonComponent text="רשימת מקומות בטוחים" onClick={() => navigate("safe-places")} />
             </div>
             <div className="dashboard-btn">
               <ButtonComponent text="הוספת מיגונית" onClick={() => navigate("add-shelter")} />
@@ -54,7 +57,7 @@ function AdminDashboard() {
             <div className="dashboard-btn">
               <ButtonComponent text="כל הבקשות" onClick={() => navigate("requests")} />
             </div>
-             <div className="dashboard-btn">
+            <div className="dashboard-btn">
               <ButtonComponent text="כל ההודעות" onClick={() => navigate("contact")} />
             </div>
             <div className="dashboard-btn">

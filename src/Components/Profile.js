@@ -22,19 +22,15 @@ const [editEmail, setEditEmail] = useState(user?.email || "");
 
 const updateUser = async () => {
   try {
+    // 1. יצירת אובייקט המשתמש המעודכן המלא
     const updatedUser = {
       ...user,
       userName: editUserName,
       email: editEmail
     };
-
-    const data = await PutItems(`users/${user.userId}`, updatedUser);
-
-    // עדכון localStorage
-    localStorage.setItem("user", JSON.stringify(data || updatedUser));
-
+    const response = await PutItems(`users/update/${user.userId}`, updatedUser);
+    localStorage.setItem("user", JSON.stringify(updatedUser));
     setIsEditing(false);
-
     toast.success("הפרטים עודכנו בהצלחה");
   } catch (error) {
     console.log(error);

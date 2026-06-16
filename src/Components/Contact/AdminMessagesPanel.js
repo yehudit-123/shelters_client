@@ -2,6 +2,8 @@ import { useState, useEffect } from "react";
 import { GetItems, PutItems } from "../../Service";
 import { toast } from "react-toastify";
 import MessageCard from "./MessageCard";
+import "../../Style/CssPages/Contact.css";
+
 
 function AdminMessagesPanel() {
   const [allMessages, setAllMessages] = useState([]);
