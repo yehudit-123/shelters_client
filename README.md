@@ -1,70 +1,230 @@
-# Getting Started with Create React App
+# 🛡️ מערכת ניהול מיגוניות
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+מערכת לניהול, איתור ודיווח על מיגוניות, המאפשרת למשתמשים למצוא מיגוניות קרובות, להציע מיגוניות חדשות, לשלוח בקשות לאישור מיגוניות וליצור קשר עם מנהלי המערכת.
 
-## Available Scripts
+---
 
-In the project directory, you can run:
+## 🏗️ מבנה הפרויקט
 
-### `npm start`
+```text
+ShelterProject/
+│
+├── client/                     — React Client
+│   ├── Components/             — כל הקומפוננטות
+│   ├── Style/
+│   │   └── CssPages/           — קבצי CSS
+│   ├── Service.js              — קריאות לשרת
+│   └── App.js                  — הגדרות Routes
+│
+├── server/
+│   ├── routes/                 — Routes של Express
+│   ├── services/               — לוגיקה וגישה למסד הנתונים
+│   ├── dataBase/
+│   │   └── ConnectToDB.js
+│   └── server.js
+│
+└── README.md
+```
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+---
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+## ✨ פונקציונליות
 
-### `npm test`
+### 👤 משתמש רגיל
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+- הרשמה למערכת
+- התחברות למערכת
+- צפייה בפרופיל אישי
+- צפייה בבקשות שהגיש
+- הצעת מיגונית חדשה
+- צפייה במיגוניות במפה
+- יצירת מסלול הליכה למיגונית
+- שליחת הודעות למנהלי המערכת
 
-### `npm run build`
+### 🛠️ מנהל מערכת
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+- אישור או דחיית מיגוניות
+- הוספת מיגוניות ישירות למערכת
+- צפייה בכל הבקשות
+- ניהול משתמשים
+- הוספת משתמשים
+- עריכת משתמשים
+- מחיקת משתמשים
+- קבלת הודעות ממשתמשים
+- מענה לפניות
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+---
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+## 🗄️ בסיס הנתונים
 
-### `npm run eject`
+המערכת מבוססת על MySQL.
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+### users
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+| שדה | סוג |
+|------|------|
+| userId | INT |
+| userName | VARCHAR |
+| email | VARCHAR |
+| phone | VARCHAR |
+| userRole | VARCHAR |
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+### passwords
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+| שדה | סוג |
+|------|------|
+| userId | INT |
+| passwordHash | VARCHAR |
 
-## Learn More
+### shelters
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+| שדה | סוג |
+|------|------|
+| shelterId | INT |
+| shelterName | VARCHAR |
+| address | VARCHAR |
+| latitude | DOUBLE |
+| longitude | DOUBLE |
+| type | VARCHAR |
+| createdByUserId | INT |
+| status | VARCHAR |
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+### messages
 
-### Code Splitting
+| שדה | סוג |
+|------|------|
+| messageId | INT |
+| senderUserId | INT |
+| senderName | VARCHAR |
+| receiverUserId | INT |
+| subject | VARCHAR |
+| content | TEXT |
+| status | VARCHAR |
+| createdAt | DATETIME |
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+---
 
-### Analyzing the Bundle Size
+## 🛠️ טכנולוגיות
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+| טכנולוגיה | שימוש |
+|-----------|--------|
+| React | צד לקוח |
+| React Router | ניתוב |
+| React Toastify | הודעות מערכת |
+| Google Maps API | מפות וניווט |
+| Node.js | צד שרת |
+| Express | API |
+| MySQL | בסיס נתונים |
+| Axios / Fetch | תקשורת Client-Server |
+| CSS | עיצוב |
 
-### Making a Progressive Web App
+---
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+## 🚀 הרצת הפרויקט
 
-### Advanced Configuration
+### דרישות מקדימות
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+- Node.js
+- MySQL
+- Git
 
-### Deployment
+---
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+### הורדת הפרויקט
 
-### `npm run build` fails to minify
+```bash
+git clone <repository-url>
+```
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+---
+
+### התקנת צד שרת
+
+```bash
+cd server
+npm install
+```
+
+יצירת קובץ:
+
+```env
+DB_HOST=localhost
+DB_USER=root
+DB_PASSWORD=your_password
+DB_NAME=sheltersdb
+```
+
+הפעלת השרת:
+
+```bash
+npm start
+```
+
+---
+
+### התקנת צד לקוח
+
+```bash
+cd client
+npm install
+```
+
+יצירת קובץ:
+
+```env
+REACT_APP_GOOGLE_MAPS_API_KEY=YOUR_GOOGLE_MAPS_KEY
+```
+
+הפעלת הפרויקט:
+
+```bash
+npm start
+```
+
+---
+
+## 📁 ארכיטקטורה
+
+```text
+React Client
+      ↓
+Express Routes
+      ↓
+Services Layer
+      ↓
+MySQL Database
+```
+
+הפרויקט בנוי במבנה שכבות כדי להפריד בין:
+
+- ממשק המשתמש
+- הלוגיקה העסקית
+- הגישה למסד הנתונים
+
+---
+
+## 📸 צילומי מסך
+
+### מסך התחברות
+
+![Login](screenshots/login.png)
+
+### דשבורד משתמש
+
+![Dashboard](screenshots/dashboard.png)
+
+### ניהול מיגוניות
+
+![Shelters](screenshots/shelters.png)
+
+### מפה
+
+![Map](screenshots/map.png)
+
+---
+
+## 👩‍💻 יוצרת הפרויקט
+
+יהודית ברוכי
+
+פרויקט גמר בנושא ניהול ואיתור מיגוניות באמצעות React, Node.js, MySQL ו-Google Maps.
